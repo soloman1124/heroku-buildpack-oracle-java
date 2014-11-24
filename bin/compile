@@ -19,45 +19,6 @@ export_env_dir $ENV_DIR
 #create the cache dir if it doesn't exist
 mkdir -p $CACHE_DIR
 
-statusn "Installing wget..."
-install_wget $CACHE_DIR
-echo " version $(wget_version) installed"
-
 statusn "Installing JDK..."
 install_java $CACHE_DIR $BUILD_DIR
 echo " version $(java_version) installed"
-
-if [ "true" == $JCE ]; then
-  statusn "Installing JCE Unlimited Strength..."
-  install_jce
-  echo " done"
-fi
-
-statusn "Installing Maven..."
-install_maven $CACHE_DIR
-echo " version $(maven_version) installed"
-
-if [ -n $NEW_RELIC_LICENSE_KEY ]; then
-  statusn "Installing NewRelic agent..."
-  install_newrelic $BUILD_DIR
-  echo " done"
-fi
-
-if [ -n $GEMS ]; then
-  status "Installing Gems..."
-  install_gems $CACHE_DIR $GEMS
-fi
-
-cd $BUILD_DIR
-
-BUILDCMD="mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -DskipTests=true -U clean install"
-status "Executing build..."
-echo "$BUILDCMD" | indent
-echo "[INFO] MAVEN_OPTS=$MAVEN_OPTS" | indent
-echo "[INFO] ------------------------------------------------------------------------" | indent
-
-$BUILDCMD 2>&1 | egrep --line-buffered -v '^(\[INFO\] )?(Downloading:|Downloaded:)' | indent
-
-create_profile $BUILD_DIR
-
-rm -rf "$CACHE_DIR/.m2" "$CACHE_DIR/.gems"
