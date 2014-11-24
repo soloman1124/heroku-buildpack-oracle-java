@@ -24,3 +24,5 @@ install_java $CACHE_DIR $BUILD_DIR
 echo " version $(java_version) installed"
 
 create_profile $BUILD_DIR
+echo " JAVA_HOME=$JAVA_HOME"
+echo " PATH=$PATH"
