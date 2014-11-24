@@ -22,3 +22,5 @@ mkdir -p $CACHE_DIR
 statusn "Installing JDK..."
 install_java $CACHE_DIR $BUILD_DIR
 echo " version $(java_version) installed"
+
+create_profile $BUILD_DIR
